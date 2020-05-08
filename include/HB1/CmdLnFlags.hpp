@@ -54,8 +54,13 @@ namespace HB1{
     /**
      * Verifies that the string 'arg' is only a single char
     */
-    bool verifyCharPara(const std::string & arg);
-    
+    bool static verifyCharPara(const std::string & arg);
+
+    /**
+     * Verifies that the string 'arg' is not a flag
+     */
+    bool static verifyStringPara(const std::string & arg);
+
   public:
     /**
      * Constructor. Builds the argument vector out of the elements of argv.
@@ -97,6 +102,10 @@ namespace HB1{
      * \overload
      */
     bool isSetWithPara(const char * key, char & para, bool allow_sh = false);
+    /**
+     * \overload
+     */
+    bool isSetWithPara(const char * key, std::string & para, bool allow_sh = false);
     ///@}
 
     ///@{
@@ -122,6 +131,10 @@ namespace HB1{
      * \overload
      */
     bool isSetWithOptPara(const char * key, char & para, bool allow_sh = false);
+    /** 
+     * \overload
+     */
+    bool isSetWithOptPara(const char * key, std::string & para, bool allow_sh = false);
     ///@}
 
     /** \brief Print all argument strings in args_

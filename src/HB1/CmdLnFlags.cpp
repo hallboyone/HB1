@@ -103,6 +103,25 @@ bool HB1::CmdLnFlags::isSetWithPara(const char * key, char & para, bool allow_sh
   else return false;
 }
 
+bool HB1::CmdLnFlags::isSetWithPara(const char * key, std::string & para, bool allow_sh){
+  std::vector<FlagPair>::iterator matching_arg = findFlag(key, allow_sh);
+
+  if (matching_arg != args_.end()){//if a match was found, look for parameter in following arg
+    matching_arg->second = true;
+    ++matching_arg;
+    if (matching_arg == args_.end())
+      throw std::invalid_argument("Flag needing integer parameter set without parameter");
+
+    if (!verifyStringPara(matching_arg->first))
+      throw std::invalid_argument("Flag needing integer parameter set with invalid parameter");
+
+    para = matching_arg->first;
+    matching_arg->second = true;
+    return true;
+  }
+  else return false;
+}
+
 bool HB1::CmdLnFlags::isSetWithOptPara(const char * key, int & para, bool allow_sh){
   //Case 1: no match       -> isSetWithPara returns false, para unchaged
   //Case 2: match, no para -> isSetWithPara throws an invalid_argument
@@ -130,6 +149,19 @@ bool HB1::CmdLnFlags::isSetWithOptPara(const char * key, double & para, bool all
 }
 
 bool HB1::CmdLnFlags::isSetWithOptPara(const char * key, char & para, bool allow_sh){
+  //Case 1: no match       -> isSetWithPara returns false, para unchaged
+  //Case 2: match, no para -> isSetWithPara throws an invalid_argument
+  //Case 3: match, para    -> isSetWithPara returns true and sets para
+  try{
+    //Will throw exception if match is found but no argument
+    return isSetWithPara(key, para, allow_sh);
+  }
+  catch (std::invalid_argument & e){
+    return true;
+  }
+}
+
+bool HB1::CmdLnFlags::isSetWithOptPara(const char * key, std::string & para, bool allow_sh){
   //Case 1: no match       -> isSetWithPara returns false, para unchaged
   //Case 2: match, no para -> isSetWithPara throws an invalid_argument
   //Case 3: match, para    -> isSetWithPara returns true and sets para
@@ -228,4 +260,9 @@ bool HB1::CmdLnFlags::verifyDoublePara(const std::string & arg){
 bool HB1::CmdLnFlags::verifyCharPara(const std::string & arg){
   //Make sure string has size 1
   return (arg.size() == 1);
+}
+
+bool HB1::CmdLnFlags::verifyStringPara(const std::string & arg){
+  //Make sure string is not a flag
+  return (numLeadingChar(arg, '-') == 0 || numLeadingChar(arg, '-') > 2);
 }
