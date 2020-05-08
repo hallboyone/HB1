@@ -1,0 +1,26 @@
+CC := g++ # This is the main compiler                                                                                                                                               
+SRCDIR := src
+HDDIR := include
+BUILDDIR := lib
+TARGET := lib
+
+SRCEXT := cpp
+HDEXT := hpp
+SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.so))
+CFLAGS  := -Wall -fPIC -Werror -Wsign-compare -Wwrite-strings -Wtype-limits -std=c++11 -O3 -shared
+INC     := -I include
+
+$(TARGET): $(OBJECTS)
+	@echo " Done!"
+#	@echo " $(CC) $^ -shared -o $(TARGET) "; $(CC) $^ -shared -o $(TARGET)
+
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(BUILDDIR)
+	@echo " $(CC) $(CFLAGS) $(INC) $(LIB) -shared -o $@ $<"; $(CC) $(CFLAGS) $(INC) -o $@ $< 
+
+clean:
+	@echo " $ $(SRCDIR)/%.$(SRCEXT) Cleaning..."; 
+	@echo " $(RM) -r $(BUILDDIR)/HB1/* $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+
+.PHONY: clean
