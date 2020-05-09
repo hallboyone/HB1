@@ -231,7 +231,6 @@ std::vector<HB1::CmdLnFlags::FlagPair>::iterator HB1::CmdLnFlags::findFlag(const
     if (numLeadingChar(cur_arg->first, '-') == 2){ //Full flag argument
       potential_match = cur_arg->first;
       potential_match.erase(0,2);
-
       if (potential_match == key) return cur_arg;
     }
     else if (allow_sh && numLeadingChar(cur_arg->first, '-') == 1){ //SH flag arg
