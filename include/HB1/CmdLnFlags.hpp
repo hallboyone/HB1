@@ -69,6 +69,20 @@ namespace HB1{
      */
     CmdLnFlags(int argc, char ** argv);
 
+    /** @name Vector like function
+     * A collection of functions that behave like the matching function in std::vector
+     *  @{
+     */    
+    /** \brief Returns the string at index n*/
+    const std::string & operator[](size_t n);
+    /** \brief Returns the last string in args_*/
+    const std::string & back();
+    /** \brief Returns the first string in args_*/
+    const std::string & front();
+    /** \brief Returns the number of arguments*/
+    size_t size();
+    /** @} */
+    
     /** \brief Check if flag is set.
      *
      *   Checks if a flag matching the key has been set. If it has, return true.
@@ -78,7 +92,10 @@ namespace HB1{
      */
     bool isSet(const char * key, bool allow_sh = false);
 
-    ///@{
+    /** @name Flag Checks with Required Parameters
+     * Functions to check if a flag is set and require a parameter if so
+     *  @{
+     */
     /** \brief Check if flag is set and get its required parameter value.
      *
      * Returns true if flag has been set, false otherwise.
@@ -106,9 +123,12 @@ namespace HB1{
      * \overload
      */
     bool isSetWithPara(const char * key, std::string & para, bool allow_sh = false);
-    ///@}
+    /** @} */
 
-    ///@{
+    /** @name Flag Checks with Optional Parameters
+     * Functions to check if a flag is set and read its parameter if avalible
+     *  @{
+     */
     /** \brief Check if flag is set and get its optional parameter value.
      *
      * Returns true if flag has been set, false otherwise.
@@ -135,7 +155,7 @@ namespace HB1{
      * \overload
      */
     bool isSetWithOptPara(const char * key, std::string & para, bool allow_sh = false);
-    ///@}
+    /** @} */
 
     /** \brief Print all argument strings in args_
      *

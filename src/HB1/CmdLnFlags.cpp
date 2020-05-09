@@ -33,6 +33,30 @@ HB1::CmdLnFlags::CmdLnFlags(int argc, char ** argv) :
   args_[0].second = true;
 }
 
+const std::string & HB1::CmdLnFlags::operator[](size_t n){
+  if(n < args_.size()){
+    args_[n].second = true;
+    return args_[n].first;
+  }
+  else{
+    throw std::out_of_range("Index of argument greater than number of arguments");
+  }
+}
+
+const std::string & HB1::CmdLnFlags::back(){
+  if(args_.size() > 0) args_.back().second = true;
+  return args_.back().first;
+}
+
+const std::string & HB1::CmdLnFlags::front(){
+    if(args_.size() > 0) args_.front().second = true;
+  return args_.front().first;
+}
+
+size_t HB1::CmdLnFlags::size(){
+  return args_.size();
+}
+
 bool HB1::CmdLnFlags::isSet(const char * key, bool allow_sh){
   std::vector<FlagPair>::iterator match = findFlag(key, allow_sh);
   if(match != args_.end()){
