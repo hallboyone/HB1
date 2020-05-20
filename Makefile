@@ -37,7 +37,8 @@ all: $(TARGETS)
 .SECONDEXPANSION:
 $(LIBDIR)/lib%.so.$(VERSION):$$(call getobjs,%)
 	@mkdir -p $(LIBDIR)
-	$(CXX) $^ -shared -Wl,-soname,$(LIBDIR)/lib$*.so.$(MAJOR) -o $@
+	$(CXX) -lc $^ -shared -Wl,-soname,lib$*.so.$(MAJOR) -o $@
+	@ldconfig -vn $(dir $@)
 
 #Make the object files
 $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
